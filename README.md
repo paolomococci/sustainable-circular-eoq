@@ -1,3 +1,3 @@
-# eoq-sustainability
+# Sustainable Circular EOQ
 
 Item Management System
