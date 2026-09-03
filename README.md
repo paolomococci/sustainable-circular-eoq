@@ -1,3 +1,3 @@
-# Sustainable Circular EOQ
+# Sustainable Circular Economic Order Quantity
 
 Item Management System
