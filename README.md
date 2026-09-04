@@ -2,6 +2,8 @@
 
 Item Management System
 
+Demo application for inventory management.
+
 ---
 
 ![Item Management System landing page](./screenshots/ItemManagementSystem_landing-page.png)
