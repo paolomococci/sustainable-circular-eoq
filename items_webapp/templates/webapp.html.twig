@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html themes-data-theme="light">
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Item Management
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫</text><text y=%222.0em%22 x=%220.2em%22 font-size=%2248%22 fill=%22%23eee%22>IMS</text></svg>">
+
+		{# Prevent FOUC, (Flash Of Unstyled Content) #}
+		<script src="{{ asset('assets/js/prevent-fouc.js') }}"></script>
+		{# CSS asset #}
+		<link rel="preload" href="{{ asset('assets/css/themes.css') }}" as="style" media="all" onload="this.rel='stylesheet'">
+		<noscript><link rel="stylesheet" href="{{ asset('assets/css/themes.css') }}" media="all"></noscript>
+		{# JavaScript assets #}
+		<script src="{{ asset('assets/js/themes.js') }}" defer></script>
+		<script src="{{ asset('assets/js/contact-form.js') }}" defer></script>
+		<script src="{{ asset('assets/js/mobile-modal-menu-overlay.js') }}" defer></script>
+		<script src="{{ asset('assets/js/contrast-ratios.js') }}" defer></script>
+	</head>
+	<body
+		class="wrapper">
+		{# Skip link: allows keyboard users to skip navigation and access the main content directly #}
+		<a href="#main-content" class="skip-link">Skip to main content</a>
+		<!-- 1. Header - fixed navigation bar -->
+		<header class="header">
+			<div
+				class="container header-inner">
+
+				<!-- Theme toggle button -->
+				<button id="theme-toggle" aria-label="Switch theme" title="Light / Dark / High-contrast">
+					😎
+				</button>
+
+				<a href="{{ path('app_landing')}}" class="logo">IMS</a>
+
+				<!-- Hamburger button for mobile -->
+				<button id="nav-toggle" aria-label="Toggle menu" class="nav-toggle">
+					☰
+				</button>
+
+				<nav id="main-nav" class="nav">
+					<ul>
+						<li><a href="#hero">Home</a></li>
+						<li><a href="#about">About</a></li>
+						<li><a href="#resources">Resources</a></li>
+						<li><a href="#contact">Contact</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<main>
+            <!-- 2. Hero section - first thing visitors see -->
+		    <section id="hero" class="hero">
+			    <div class="container hero-content">
+				    <h1>Item Management System</h1>
+				    <h2>Manage warehouse logistics</h2>
+
+				    <!-- Call-to-action button -->
+				    <a href="#resources" class="btn btn-primary">Get Started</a>
+			    </div>
+		    </section>
+
+		    <!-- 3. About section - quick intro -->
+		    <section id="about" class="about">
+			    <div class="container about-content">
+                    {% block body %}{% endblock %}
+			    </div>
+		    </section>
+
+			<!-- 4. Resources section - highlight key benefits -->
+			<section id="resources" class="rsrcs">
+				<div id="main-content" class="container rsrcs-grid">
+					<article class="rsrc">
+						<h3>Manage articles</h3>
+						<!-- Call-to-action button -->
+						<a href="{{ path('app_item_index')}}" class="btn btn-primary">Items</a>
+					</article>
+
+					<article class="rsrc">
+
+						<h3>Manage suppliers</h3>
+						<!-- Call-to-action button -->
+						<a href="#" class="btn btn-primary">Suppliers</a>
+					</article>
+
+					<article class="rsrc">
+						<h3>Manage staff</h3>
+						<!-- Call-to-action button -->
+						<a href="#" class="btn btn-primary">Staff</a>
+					</article>
+
+					<article class="rsrc">
+						<h3>Manage customers</h3>
+						<!-- Call-to-action button -->
+						<a href="#" class="btn btn-primary">Customers</a>
+					</article>
+				</div>
+			</section>
+
+			<!-- 5. Contact section - simple form -->
+			<section id="contact" class="contact">
+				<div class="container contact-content">
+					<h2>Get in Touch</h2>
+					<form action="#" method="post" novalidate>
+						<label for="name">Name</label>
+						<input type="text" id="name" name="name" required>
+
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" required>
+
+						<label for="message">Message</label>
+						<textarea id="message" name="message" rows="4" required></textarea>
+
+						<button type="submit" class="btn btn-primary">
+							Send Message
+						</button>
+					</form>
+				</div>
+			</section>
+        </main>
+
+		<!-- 6. Footer - small copyright notice -->
+		<footer class="footer">
+			<div class="container footer-inner">
+				©️ 2026
+				<a href="{{ path('app_landing')}}">Item Management System</a>
+				- All rights reserved
+			</div>
+		</footer>
+	</body>
+</html>

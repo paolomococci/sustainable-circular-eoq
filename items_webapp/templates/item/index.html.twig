@@ -1,0 +1,47 @@
+{% extends 'items.html.twig' %}
+
+{% block title %}Item index
+{% endblock %}
+
+{% block body %}
+    <div class="entity-header">
+        <h1 class="entity-title">Item index</h1>
+    </div>
+
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>In assortment</th>
+				<th>Stock-out</th>
+				<th>Demand</th>
+				<th>Cost</th>
+				<th>EOQ</th>
+				<th>actn</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for item in items %}
+				<tr>
+					<td data-label="Name">{{ item.name }}</td>
+					<td data-label="In assortment">{{ item.inAssortment ? 'Yes' : 'No' }}</td>
+					<td data-label="Stock-out">{{ item.inStockOut ? 'Yes' : 'No' }}</td>
+					<td data-label="Demand">{{ item.annualDemand }}</td>
+					<td data-label="Cost">{{ item.purchasePrice }}</td>
+					<td data-label="EOQ">{{ item.economicOrderQuantity }}</td>
+					<td>
+						<a href="{{ path('app_item_show', {'id': item.id}) }}" class="actn-btn">show</a>
+						<a href="{{ path('app_item_edit', {'id': item.id}) }}" class="actn-btn">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="17" style="text-align:center;">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_item_new') }}" class="btn">Create new</a>
+{% endblock %}

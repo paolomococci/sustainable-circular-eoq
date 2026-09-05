@@ -1,0 +1,85 @@
+{% extends 'items.html.twig' %}
+
+{% block title %}Item
+{% endblock %}
+
+{% block body %}
+    <div class="entity-header">
+	    <h1 class="entity-title">Show item</h1>
+    </div>
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ item.id }}</td>
+			</tr>
+			<tr>
+				<th>Name</th>
+				<td>{{ item.name }}</td>
+			</tr>
+			<tr>
+				<th>Price</th>
+				<td>{{ item.price }}</td>
+			</tr>
+			<tr>
+				<th>Total annual purchase cost</th>
+				<td>{{ item.totalAnnualPurchaseCost }}</td>
+			</tr>
+			<tr>
+				<th>Total annual cost of issuing orders</th>
+				<td>{{ item.totalAnnualCostOfIssuingOrders }}</td>
+			</tr>
+			<tr>
+				<th>Total annual cost of maintenance in stock</th>
+				<td>{{ item.totalAnnualCostOfMaintenanceInStock }}</td>
+			</tr>
+			<tr>
+				<th>Annual demand</th>
+				<td>{{ item.annualDemand }}</td>
+			</tr>
+			<tr>
+				<th>Order issue cost</th>
+				<td>{{ item.orderIssueCost }}</td>
+			</tr>
+			<tr>
+				<th>Purchase price</th>
+				<td>{{ item.purchasePrice }}</td>
+			</tr>
+			<tr>
+				<th>Annual interest-rate</th>
+				<td>{{ item.annualInterestRate }}</td>
+			</tr>
+			<tr>
+				<th>Supply Lead Time</th>
+				<td>{{ item.supplyLeadTime }}</td>
+			</tr>
+			<tr>
+				<th>Economic Order Quantity</th>
+				<td>{{ item.economicOrderQuantity }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ item.description }}</td>
+			</tr>
+			<tr>
+				<th>In assortment</th>
+				<td>{{ item.inAssortment ? 'Yes' : 'No' }}</td>
+			</tr>
+			<tr>
+				<th>Stock out</th>
+				<td>{{ item.inStockOut ? 'Yes' : 'No' }}</td>
+			</tr>
+			<tr>
+				<th>Notes</th>
+				<td>{{ item.notes }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_item_edit', {'id': item.id}) }}" class="btn">edit</a>
+
+	<a href="{{ path('app_item_index') }}" class="btn">back to list</a>
+
+	{{ include('item/_delete_form.html.twig') }}
+{% endblock %}

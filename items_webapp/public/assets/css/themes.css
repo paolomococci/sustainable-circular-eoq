@@ -1,0 +1,857 @@
+/*
+ * @license MIT
+ *
+ * MIT License
+ *
+ * Copyright (c) 2026 Paolo Mococci (full-stack web developer)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+/* ------------------------------------------------------------------
+0.  Custom properties - default (light) theme
+   ------------------------------------------------------------------ */
+:root {
+    /* ---------- fonts --------------------------------------------- */
+    --themes-sans-font: sans-serif;
+    --themes-serif-font: serif;
+    --themes-mono-font: monospace;
+
+    /* ---------- radius, border and padding -------------------------------- */
+    --themes-radius: 4px;
+    --themes-border-weight: 2px;
+    --themes-field-padding: 1rem 1.25rem; /* input / textarea / select */
+    --themes-cell-padding: 0.85em 1.15em; /* table th, td */
+    --themes-code-block-padding: 0.85rem 1.15rem; /* pre */
+    --themes-kbd-padding: 0.15rem 0.5rem; /* kbd */
+
+    /* Hue - color tone expressed in degrees on the color wheel ranging from 0 to 360 */
+    /* Saturation - color intensity expressed as a percentage */
+    /* Lightness - brightness expressed as a percentage */
+    /* Alpha - opacity expressed from 0, completely transparent, to 1, completely opaque */
+    /* In the modern version, replacing commas with spaces: hsl(100 80% 50% / 0.7) here I will get a nice green! */
+
+    /* ---------- shadow and halo ---------------------------------- */
+    --themes-inner-shadow: hsl(0 0% 66.5% / 0.55);
+    --themes-outer-halo: hsl(0 0% 0% / 0.2);
+
+    /* ---------- colors - light theme ------------------------------ */
+    --themes-bg: hsl(0 0% 100%); /* page background */
+    --themes-accent-bg: hsl(300 25% 98% / 0.7); /* cards and sections */
+    --themes-text: hsl(210 10% 13%); /* main body text (210 10% 13%) */
+    --themes-text-light: hsl(220 20% 55%);
+    --themes-border: hsl(210 10% 70%);
+    --themes-accent: hsl(225 80% 40%); /* primary button and links */
+    --themes-accent-hover: hsl(225 85% 45%);
+    --themes-accent-text: var(--themes-bg);
+    --themes-accent-text-hover: hsl(0 0% 80%);
+    --themes-code: hsl(0 70% 50%); /* inline code */
+    --themes-preformatted: hsl(220 20% 30%); /* pre > code background */
+    --themes-marked: hsl(110 60% 35%); /* mark element */
+    --themes-disabled: hsl(210 10% 95%);
+    --themes-error: hsl(0 80% 50%);
+
+    /* ---------- high-contrast ------------------------------------- */
+    --hc-themes-bg: hsl(0 0% 8%);
+    --hc-themes-accent-bg: hsl(210 10% 18%);
+    --hc-themes-text: hsl(0 0% 98%);
+    --hc-themes-text-light: hsl(0 0% 98%);
+    --hc-themes-border: hsl(0 0% 45%);
+    --hc-themes-accent-text-hover: hsl(0 0% 10%);
+    --hc-themes-accent: hsl(190 85% 55%);
+    --hc-themes-accent-hover: hsl(190 95% 70%);
+    --hc-themes-accent-text: var(--themes-bg);
+    --hc-themes-code: hsl(0 80% 72%);
+    --hc-themes-preformatted: hsl(220 20% 30%);
+    --hc-themes-marked: hsl(200 90% 65%);
+    --hc-themes-error: hsl(0 85% 62%);
+
+    /* ---------- color-scheme helpers ------------------------------ */
+    color-scheme: light; /* will be overridden by dark media query */
+}
+
+/* ------------------------------------------------------------------
+1. Explicit light theme - chosen by the user
+   ------------------------------------------------------------------ */
+
+[themes-data-theme="light"] {
+    color-scheme: light;
+    --themes-bg: hsl(0 0% 100%);
+    --themes-accent-bg: hsl(300 25% 98% / 0.7);
+    --themes-text: hsl(210 10% 13%);
+    --themes-text-light: hsl(220 20% 55%);
+    --themes-border: hsl(210 10% 70%);
+    --themes-accent: hsl(225 80% 40%);
+    --themes-accent-hover: hsl(225 85% 45%);
+    --themes-code: hsl(0 70% 50%);
+    --themes-preformatted: hsl(220 20% 30%);
+    --themes-marked: hsl(110 60% 35%);
+}
+
+/* ------------------------------------------------------------------
+2. Explicit dark theme - chosen by the user
+   ------------------------------------------------------------------ */
+[themes-data-theme="dark"] {
+    color-scheme: dark;
+    --themes-bg: hsl(210 10% 18%);
+    --themes-accent-bg: hsl(0 0% 13% / 0.7);
+    --themes-text: hsl(210 20% 95%);
+    --themes-border: hsl(210 10% 40%);
+    --themes-accent: hsl(225 90% 65%);
+    --themes-accent-hover: hsl(225 95% 70%);
+    --themes-accent-text: hsl(0 0% 15%);
+    --themes-accent-text-hover: hsl(0 0% 25%);
+    --themes-code: hsl(0 70% 80%);
+    --themes-preformatted: hsl(220 20% 90%);
+    --themes-error: hsl(0 100% 75%);
+}
+
+/* ------------------------------------------------------------------
+3. High-contrast - class or data attribute
+   ------------------------------------------------------------------ */
+.high-contrast,
+[themes-data-theme="hc"] {
+    --themes-bg: var(--hc-themes-bg);
+    --themes-accent-bg: var(--hc-themes-accent-bg);
+    --themes-text: var(--hc-themes-text);
+    --themes-text-light: var(--hc-themes-text-light)
+    --themes-border: var(--hc-themes-border);
+    --themes-accent: var(--hc-themes-accent);
+    --themes-accent-hover: var(--hc-themes-accent-hover);
+    --themes-accent-text-hover: var(--hc-themes-accent-text-hover);
+    --themes-code: var(--hc-themes-code);
+    --themes-preformatted: var(--hc-themes-preformatted);
+}
+
+/* ------------------------------------------------------------------
+4. Reset and base styles
+   ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--themes-sans-font);
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--themes-text);
+    background-color: var(--themes-bg);
+    font-size: clamp(1rem, 2vw+0.5rem, 1.25rem); /* ≈16-20 px */
+    line-height: 1.6;
+    display: grid;
+    grid-template-columns: 1fr minmax(30rem, clamp(30rem, 80vw, 60rem)) 1fr;
+}
+body > * {
+    grid-column: 2;
+}
+p,
+li,
+blockquote {
+    margin-bottom: 1rem;
+}
+a {
+    text-decoration: underline; /* Default underline */
+    text-underline-offset: 0.15rem;
+}
+
+/* ---------- Utility container -----------------------------------*/
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.wrapper main {
+    flex: 1;
+}
+.wrapper footer {
+    padding: 1rem;
+}
+
+/* ------------------------------------------------------------------
+5. Typography - clamp() for all headings
+   ------------------------------------------------------------------ */
+h1 {
+    font-size: clamp(2rem, 5vw+0.4rem, 3rem);
+}
+h2 {
+    font-size: clamp(1.75rem, 4vw+0.3rem, 2.6rem);
+    margin-top: clamp(3rem, 4vw+0.4rem, 4rem);
+}
+h3 {
+    font-size: clamp(1.5rem, 3vw+0.2rem, 2rem);
+    margin-top: clamp(3rem, 3vw+0.3rem, 3rem);
+}
+h4 {
+    font-size: clamp(1.25rem, 2vw+0.15rem, 1.44rem);
+}
+h5 {
+    font-size: clamp(1rem, 1.5vw+0.1rem, 1.15rem);
+}
+h6 {
+    font-size: clamp(0.9rem, 1vw+0.05rem, 0.96rem);
+}
+
+/* ------------------------------------------------------------------
+6. Header
+   ------------------------------------------------------------------ */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--themes-accent-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--themes-text);
+    white-space: nowrap;
+}
+
+/* header nav */
+.header .nav a {
+    text-decoration: none !important;
+    color: var(--themes-accent);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+}
+
+.header .nav a:hover,
+.header .nav a:focus {
+    color: var(--themes-accent-hover);
+}
+
+/* ------------------------------------------------------------------
+7. Navigation
+   ------------------------------------------------------------------ */
+.nav {
+    /* always flex, mobile will change direction */
+    display: flex;
+    /* Allows wrapping on small screens */
+    flex-wrap: wrap;
+}
+.nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+.nav li {
+    margin-left: 2rem;
+}
+.nav a {
+    text-decoration: none !important;
+    color: var(--themes-accent-text);
+    transition:
+        color 0.15s ease,
+        background-color 0.15s ease;
+}
+.nav a:hover {
+    color: var(--themes-accent-text-hover);
+}
+
+/* hamburger button - hidden on desktop */
+.nav-toggle {
+    color: var(--themes-accent);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+}
+
+/* ------------------------------------------------------------------
+8. Cover wrapper
+   ------------------------------------------------------------------ */
+.cover-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: auto;
+}
+
+/* ------------------------------------------------------------------
+9. Hero section
+   ------------------------------------------------------------------ */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("https://items.local/assets/img/sky_under_the_sun.svg")
+        no-repeat center/cover;
+    color: var(--themes-accent-text);
+    text-align: center;
+}
+.hero-content {
+    max-width: 600px;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+}
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 1.5em;
+}
+
+/* Buttons */
+.btn {
+    font-weight: 600;
+    display: inline-block;
+    border-radius: var(--themes-radius);
+    text-decoration: none;
+}
+.btn-primary {
+    background: var(--themes-accent);
+    color: var(--themes-accent-text);
+}
+.btn-primary:hover {
+    background: var(--themes-accent-hover);
+}
+.actn-btn {
+    display: inline;
+    padding: 0.35rem 0.75rem;
+    margin: 0.15rem 0.35rem;
+    font-size: 0.5rem;
+    border-radius: var(--themes-radius);
+    text-decoration: none;
+}
+
+/* ------------------------------------------------------------------
+10. About section
+   ------------------------------------------------------------------ */
+.about {
+    padding: 4rem 0;
+    background: var(--themes-accent-bg);
+}
+.about-content {
+    text-align: center;
+}
+.about h2 {
+    margin-bottom: 0.75em;
+}
+
+/* ------------------------------------------------------------------
+11. resources grid
+   ------------------------------------------------------------------ */
+.rsrcs {
+    padding: 4rem 0;
+}
+.rsrcs-grid {
+    display: grid;
+    gap: 2rem;
+}
+.rsrc {
+    text-align: center;
+    padding: 1.5rem;
+    background: var(--themes-accent-bg);
+    border-radius: var(--themes-radius);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.rsrc img {
+    margin-bottom: 0.75em;
+}
+.rsrc h3 {
+    margin-top: 0.5em;
+}
+
+/* ------------------------------------------------------------------
+12. Contact section
+   ------------------------------------------------------------------ */
+.contact {
+    padding: 4rem 0;
+    background: var(--themes-accent-bg);
+}
+.contact-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+form {
+    margin-top: 3rem;
+}
+form label {
+    display: block;
+    margin-bottom: 0.25em;
+    font-weight: bold;
+}
+form input,
+form textarea,
+form select {
+    font-size: 1.2rem;
+    font-weight: 600;
+    width: 100%;
+    padding: var(--themes-field-padding);
+    margin-bottom: 1rem;
+    border: var(--themes-border-weight) solid var(--themes-border);
+    border-radius: var(--themes-radius);
+}
+form button,
+form input[type="submit"],
+form input[type="reset"],
+form input[type="button"] {
+    width: 100%;
+    padding: 0.75rem 0;
+    margin-bottom: 0.5rem;
+    border-radius: var(--themes-radius);
+}
+form button:focus-visible,
+form input[type="submit"]:focus-visible,
+form input[type="reset"]:focus-visible,
+form input[type="button"]:focus-visible {
+    outline: 3px solid var(--themes-accent);
+    outline-offset: 2px;
+}
+form input:invalid {
+    border-color: var(--themes-error);
+}
+form a.btn {
+    margin: 0.5rem;
+}
+
+/* ------------------------------------------------------------------
+13. Footer
+   ------------------------------------------------------------------ */
+.footer {
+    background: var(--themes-accent-bg);
+    color: var(--themes-text-light);
+    text-align: center;
+    padding: 1rem 0;
+}
+.footer-inner a {
+    color: var(--themes-accent);
+    text-decoration: none;
+}
+.footer-inner a:hover {
+    color: var(--themes-accent-hover);
+}
+
+/* ------------------------------------------------------------------
+14. Link-Like Button Styles (merged from link_like_button.css)
+   ------------------------------------------------------------------ */
+
+/* Buttons that are <a> tags */
+a.btn,
+a.actn-btn,
+a.button {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--themes-accent-text);
+    background-color: var(--themes-accent);
+    border: var(--themes-border-weight) solid var(--themes-accent);
+    padding: 0.5em 1em; /* consistent with link_like_button */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: var(--themes-radius); /* use the same radius variable */
+    font-weight: 600;
+    transition:
+        background-color 0.15s ease,
+        transform 0.05s ease;
+}
+
+/* Hover / focus for anchor-buttons */
+a.btn:hover,
+a.actn-btn:hover,
+a.button:hover,
+a.btn:focus,
+a.actn-btn:focus,
+a.button:focus {
+    background-color: var(--themes-accent-hover);
+    /* keep text color readable */
+    color: var(--themes-accent-text-hover);
+    /* adds a shadow for more contrast */
+    /* adds a shadow for more contrast */
+    box-shadow:
+        0 0 0 4px var(--themes-inner-shadow),
+        0 4px 12px var(--themes-outer-halo);
+    transform: translateY(-2px);
+}
+
+/* Optional - if you want a primary variant for anchors. */
+a.btn-primary,
+a.actn-btn-primary,
+a.button-primary {
+    background-color: var(--themes-accent);
+}
+a.btn-primary:hover,
+a.actn-btn-primary:hover,
+a.button-primary:hover {
+    background-color: var(--themes-accent-hover);
+}
+/* logo and action buttons */
+a.logo,
+a.actn-btn {
+    text-decoration: none !important;
+}
+/* To distinguish links from plain text. */
+a:not(.btn):not([role="button"]):not(.logo-link):not(.actn-btn) {
+    text-decoration: underline;
+    text-underline-offset: 0.15rem;
+}
+
+/* ------------------------------------------------------------------
+15. Table striping
+   ------------------------------------------------------------------ */
+.table {
+    width: 100%;
+    border-collapse: collapse; /* removes double borders */
+    margin: 3rem 0;
+    background-color: var(--themes-accent-bg);
+}
+.table th,
+.table td {
+    padding: var(--themes-cell-padding);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: var(--themes-border-weight) solid var(--themes-border); /* row separator */
+}
+/* Header row - bold, slightly darker background */
+.table thead th {
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.04);
+}
+/* Zebra striping - every even row gets a light tint */
+.table tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+/* Links inside tables become button-style (optional) */
+.table a.btn,
+.table a.button {
+    margin-right: 0.5rem;
+}
+
+/* ------------------------------------------------------------------
+16. Code blocks
+   ------------------------------------------------------------------ */
+
+code,
+pre,
+kbd,
+samp {
+    font-family: var(--themes-mono-font); /* uniform for all code elements */
+}
+kbd {
+    padding: var(--themes-kbd-padding);
+    border: var(--themes-border-weight) solid var(--themes-preformatted);
+    border-bottom: 3px solid var(--themes-preformatted);
+    border-radius: var(--themes-radius);
+    color: var(--themes-preformatted);
+}
+pre {
+    padding: var(--themes-code-block-padding);
+    max-width: 100%;
+    overflow: auto;
+    color: var(--themes-preformatted);
+    border-radius: var(--themes-radius);
+}
+pre code {
+    padding: 0;
+    margin: 0;
+}
+
+/* ------------------------------------------------------------------
+17. Media
+   ------------------------------------------------------------------ */
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(
+        --themes-radius
+    ); /* visual consistency with forms and buttons */
+}
+
+/* ------------------------------------------------------------------
+18. Responsive tables
+   ------------------------------------------------------------------ */
+@media (max-width: 720px) {
+    .table thead {
+        display: none;
+    } /* hide header on mobile */
+
+    .table tr {
+        display: block;
+        margin-bottom: 0.75rem;
+        border: var(--themes-border-weight) solid var(--themes-border);
+        border-radius: var(--themes-radius, 4px);
+        background-color: var(--themes-accent-bg);
+        padding: 0.5rem; /* inner spacing */
+    }
+
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: none;
+    }
+
+    .table td::before {
+        /* pseudo-header label */
+        content: attr(data-label); /* set in the template */
+        font-weight: 600;
+        color: var(--themes-text-light);
+        flex-basis: 45%;
+        white-space: nowrap;
+    }
+}
+
+/* ------------------------------------------------------------------
+19. Responsive Top Menu
+   ------------------------------------------------------------------ */
+
+/* Close button, visible only on mobile */
+.nav-close {
+    display: none;
+}
+
+@media (max-width: 850px) {
+    /* --- 1. Mobile controls visibility --- */
+    .nav-toggle {
+        display: block !important; /* View hamburger on mobile */
+    }
+
+    /* The close button is managed here and should always be visible when the menu is active via JavaScript */
+    .nav-close {
+        display: block;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--themes-text-light);
+    }
+
+    /* --- 2. The basic state of the Menu, when Closed --- */
+    .nav {
+        position: fixed; /* Fixed on the screen to avoid scrolling with the page */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        height: 100vh;
+        z-index: 2000; /* Higher than the overlay, to be the first interactive element */
+        background-color: var(
+            --themes-accent-bg
+        ); /* Use the background defined in the theme */
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Menu Active State */
+    .nav.is-open {
+        opacity: 1;
+        visibility: visible;
+        /* Complex transition to animate opening/closing */
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s linear;
+    }
+
+    /* --- 3. Overlay, the background that covers the screen --- */
+    .menu-overlay {
+        position: fixed;
+        inset: 0; /* Covers the entire viewport area */
+        z-index: 1999; /* Below the active menu, above all page content */
+        background-color: rgba(
+            0,
+            0,
+            0,
+            0
+        ); /* Initially transparent then uses var(--themes-bg) */
+        opacity: 0;
+        visibility: hidden; /* Block interaction when closed */
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s linear;
+    }
+
+    /* Overlay Active State */
+    .menu-overlay.is-open {
+        opacity: 0.6; /* Semi-transparent for background effect */
+        visibility: visible;
+    }
+
+    /* --- 4. Internal layout of the Menu, the actual content --- */
+    .nav ul {
+        list-style: none;
+        margin: 0 auto; /* Center the list inside the nav container */
+        padding: 2rem 1rem; /* Internal padding for the breathing effect */
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 90%;
+        max-width: 400px; /* Limit the maximum width of the content */
+    }
+
+    .nav li {
+        margin: 0 !important;
+        text-align: center;
+        width: 100%;
+    }
+
+    .nav a {
+        font-size: 1.25rem;
+        padding: 0.75rem 1rem;
+        border-radius: var(--themes-radius);
+        transition: all 0.2s ease;
+        display: block; /* Makes the entire link area clickable */
+    }
+
+    /* Improved hover styles for mobile */
+    .nav a:hover {
+        background-color: rgba(0, 0, 0, 0.1); /* Hover discreto e uniforme */
+        color: var(--themes-accent-text-hover);
+    }
+}
+
+/* ==================================================================
+   DESKTOP SPECIFICATION (Breakpoint > 850px)
+   ================================================================== */
+@media (min-width: 851px) {
+    /* Ensures that floating components are hidden on desktop */
+    .nav-toggle,
+    .menu-overlay,
+    .nav-close {
+        display: none !important;
+    }
+
+    /* The menu reverts to its original horizontal layout, unless overwritten elsewhere */
+    /* Here the layout relies on larger media queries or pre-existing rules that manage the flexbox nav. */
+    .nav {
+        position: static; /* Return to the static position of the document flow */
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* ------------------------------------------------------------------
+21. Skip-link accessibility - always hidden, visible on focus
+   ------------------------------------------------------------------ */
+.skip-link {
+    /* Off-screen visually-hidden pattern. */
+    position: absolute;         /* Out of normal flow. */
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;               /* No extra space. */
+    overflow: hidden;
+    /* clip: rect(0 0 0 0); */  /* Old trick for IE8 and IE9. */
+    clip-path: inset(50%);      /* Instead of clip for modern browsers. */
+    white-space: nowrap;        /* Avoid line wrap in old browsers. */
+    border: 0;
+}
+/* Show it when focused. */
+.skip-link:focus {
+    width: auto;
+    height: auto;
+    margin: 0.5rem;             /* Give a little breathing room. */
+    clip: auto;
+    left: 10px;                 /* Visible near the top-left corner. */
+    top: 50px;
+    background-color: var(--themes-bg);
+    color: var(--themes-text);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--themes-radius);
+    z-index: 1000;              /* Above other content. */
+    /* Keep the focus outline. */
+    box-shadow:
+        0 0 0 3px var(--themes-accent),         /* Inner shadow (border-like). */
+        0 4px 12px var(--themes-outer-halo);    /* Blurred outer shadow. */
+}
+.entity-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+    margin-top: 4rem;
+}
+.entity-header .entity-title {
+    margin-left: auto;
+}
+
+/* ------------------------------------------------------------------
+22. Print styles
+   ------------------------------------------------------------------ */
+@media print {
+    @page {
+        margin: 1cm;
+    }
+    body {
+        display: block;
+    }
+    header,
+    nav,
+    footer {
+        display: none;
+    }
+    article {
+        border: none;
+        padding: 0;
+    }
+    a[href^="http"]::after {
+        content: " <" attr(href) ">";
+    }
+    abbr[title]::after {
+        content: " (" attr(title) ")";
+    }
+    hr {
+        border-top: var(--themes-border-weight) solid var(--themes-border);
+    }
+    mark {
+        border: var(--themes-border-weight) solid var(--themes-border);
+    }
+    figure {
+        break-inside: avoid;
+    }
+    pre code {
+        white-space: pre-wrap;
+    }
+}
+
+/* ------------------------------------------------------------------
+23. Reduced motion
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion) {
+    dialog {
+        max-width: calc(100vw-2rem);
+    }
+}

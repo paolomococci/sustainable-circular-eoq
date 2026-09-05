@@ -1,0 +1,14 @@
+{% extends 'items.html.twig' %}
+
+{% block title %}New Item
+{% endblock %}
+
+{% block body %}
+    <div class="entity-header">
+	    <h1 class="entity-title">New item</h1>
+    </div>
+
+	{{ include('item/_form.html.twig') }}
+
+	<a href="{{ path('app_item_index') }}" class="btn">back to list</a>
+{% endblock %}

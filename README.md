@@ -536,6 +536,8 @@ sudo systemctl restart php-fpm
 systemctl status php-fpm --no-pager
 ```
 
+**Please note that I have not included all the directories and files generated during the scaffolding phase in this repository, but only the parts that I have modified or that I feel are worth mentioning.**
+
 ---
 
 ## `8` MariaDB database setup
